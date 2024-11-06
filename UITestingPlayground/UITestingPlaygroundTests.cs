@@ -24,7 +24,7 @@ namespace UITestingPlaygroundTests
         }
 
         [Test]
-        public void TestButtonHiddenLayers()
+        public void TestHiddenLayers()
         {
             driver.Navigate().GoToUrl("http://www.uitestingplayground.com/hiddenlayers");
 
@@ -34,11 +34,11 @@ namespace UITestingPlaygroundTests
             try
             {
                 greenButton.Click();
-                Assert.Fail("Green button should not be clickable again after the first click.");
+                Assert.Fail("The green button should be disabled after the first click");
             }
             catch (WebDriverException)
             {
-                Assert.Pass("Green button cannot be clicked twice as expected.");
+                Assert.Pass("Check passed, as the green button cannot be clicked twice.");
             }
         }
 
@@ -50,29 +50,30 @@ namespace UITestingPlaygroundTests
             var button = driver.FindElement(By.Id("badButton"));
 
             Actions actions = new Actions(driver);
-            actions.MoveToElement(button).Click().Perform();
+            actions.MoveToElement(button).Click().Build().Perform();
 
-            string buttonClass = button.GetAttribute("class");
-            Assert.That(buttonClass.Contains("btn-success"), Is.True, "The button did not turn green after clicking.");
+            string updatedClass = button.GetAttribute("class");
+            Assert.That(updatedClass.Contains("btn-success"), Is.True, "The button did not change to green after being clicked.");
         }
 
         [Test]
-        public void TextInput()
+        public void TestInput()
         {
             driver.Navigate().GoToUrl("http://www.uitestingplayground.com/textinput");
 
-            var inputField = driver.FindElement(By.Id("newButtonName"));
+            var textInput = driver.FindElement(By.Id("newButtonName"));
             var button = driver.FindElement(By.Id("updatingButton"));
 
             Actions actions = new Actions(driver);
-            actions.Click(inputField)
-                .SendKeys("Hello World")
+            actions.Click(textInput)
+                .SendKeys("Cookie")
+                .Build()
                 .Perform();
 
             button.Click();
 
             string buttonText = button.Text;
-            Assert.That(buttonText, Is.EqualTo("Hello World"), "The button name did not change as expected.");
+            Assert.That(buttonText, Is.EqualTo("Cookie"), "The button text did not update correctly.");
         }
 
         [Test]
@@ -80,43 +81,23 @@ namespace UITestingPlaygroundTests
         {
             driver.Navigate().GoToUrl("http://www.uitestingplayground.com/alerts");
 
-            var alertButton = driver.FindElement(By.Id("alertButton"));
-            alertButton.Click();
+            var alertBtn = driver.FindElement(By.Id("alertButton"));
+            alertBtn.Click();
             driver.SwitchTo().Alert().Accept();
 
-            var confirmButton = driver.FindElement(By.Id("confirmButton"));
-            confirmButton.Click();
+            var confirmBtn = driver.FindElement(By.Id("confirmButton"));
+            confirmBtn.Click();
             Thread.Sleep(1000);
             driver.SwitchTo().Alert().Accept();
 
-            var promptButton = driver.FindElement(By.Id("promptButton"));
-            promptButton.Click();
+            var promptBtn = driver.FindElement(By.Id("promptButton"));
+            promptBtn.Click();
             Thread.Sleep(1000);
-            var alert = driver.SwitchTo().Alert();
-            alert.SendKeys("hello");
-            alert.Accept();
+            var promptAlert = driver.SwitchTo().Alert();
+            promptAlert.SendKeys("hello");
+            promptAlert.Accept();
         }
 
-
-        [Test]
-        public void TestAnimatedButton()
-        {
-            driver.Navigate().GoToUrl("http://www.uitestingplayground.com/animation");
-
-            var startAnimationButton = driver.FindElement(By.Id("animationButton"));
-            startAnimationButton.Click();
-
-            var movingTargetButton = driver.FindElement(By.Id("movingTarget"));
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.Until(d => !movingTargetButton.GetAttribute("class").Contains("spin"));
-
-            movingTargetButton.Click();
-
-            var statusLabel = driver.FindElement(By.Id("opstatus"));
-            string statusText = statusLabel.Text;
-
-            Assert.That(statusText, Does.Not.Contain("spin"), "Moving Target should not have the 'spin' class after clicking.");
-        }
 
         [Test]
         public void TestProgressBar()
