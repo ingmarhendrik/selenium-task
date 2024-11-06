@@ -18,9 +18,9 @@ namespace UITestingPlaygroundTests
         [SetUp]
         public void SetUp()
         {
-            driver = new ChromeDriver(@"C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\drivers");
+            driver = new ChromeDriver("./drivers");
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(40));
         }
 
         [Test]
