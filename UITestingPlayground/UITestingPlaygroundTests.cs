@@ -18,9 +18,9 @@ namespace UITestingPlaygroundTests
         [SetUp]
         public void SetUp()
         {
-            driver = new ChromeDriver("./drivers");
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(40));
+            driver = new FirefoxDriver("./drivers");
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
         }
 
         [Test]
@@ -49,8 +49,7 @@ namespace UITestingPlaygroundTests
 
             var button = driver.FindElement(By.Id("badButton"));
 
-            Actions actions = new Actions(driver);
-            actions.MoveToElement(button).Click().Build().Perform();
+            new Actions(driver).MoveToElement(button).Click().Perform();
 
             string updatedClass = button.GetAttribute("class");
             Assert.That(updatedClass.Contains("btn-success"), Is.True, "The button did not change to green after being clicked.");
@@ -64,16 +63,10 @@ namespace UITestingPlaygroundTests
             var textInput = driver.FindElement(By.Id("newButtonName"));
             var button = driver.FindElement(By.Id("updatingButton"));
 
-            Actions actions = new Actions(driver);
-            actions.Click(textInput)
-                .SendKeys("Cookie")
-                .Build()
-                .Perform();
-
+            new Actions(driver).Click(textInput).SendKeys("Cookie").Perform();
             button.Click();
 
-            string buttonText = button.Text;
-            Assert.That(buttonText, Is.EqualTo("Cookie"), "The button text did not update correctly.");
+            Assert.That(button.Text, Is.EqualTo("Cookie"), "Button text did not update.");
         }
 
         [Test]
