@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
+using System.Drawing;
 
 namespace UITestingPlaygroundTests
 {
@@ -135,6 +136,38 @@ namespace UITestingPlaygroundTests
             string statusText = statusLabel.Text;
 
             Assert.That(statusText, Does.Not.Contain("spin"), "Moving Target should not have the 'spin' class after clicking.");
+        }
+
+        [Test]
+        public void TestProgressBar()
+        {
+            driver.Navigate().GoToUrl("http://www.uitestingplayground.com/progressbar");
+
+            var startButton = driver.FindElement(By.Id("startButton"));
+            startButton.Click();
+
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            int progressValue = 0;
+            wait.Until(d =>
+            {
+                var progressBar = driver.FindElement(By.Id("progressBar"));
+                string progressText = progressBar.Text.Replace("%", "");
+                progressValue = int.Parse(progressText);
+                return progressValue >= 73;
+            });
+
+            if (progressValue >= 75)
+            {
+                var stopButton = driver.FindElement(By.Id("stopButton"));
+                stopButton.Click();
+            }
+
+            var finalProgressBar = driver.FindElement(By.Id("progressBar"));
+            string finalProgressText = finalProgressBar.Text.Replace("%", "");
+            int finalProgressValue = int.Parse(finalProgressText);
+
+            Assert.That(finalProgressValue, Is.EqualTo(75).Within(5),
+                        $"Expected the progress bar to be close to 75%, but it was {finalProgressValue}%.");
         }
 
 

@@ -106,3 +106,4 @@ C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\U
 C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\obj\Debug\net8.0\UITestingPlayground.pdb
 C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\obj\Debug\net8.0\UITestingPlayground.genruntimeconfig.cache
 C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\obj\Debug\net8.0\ref\UITestingPlayground.dll
+C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\obj\Debug\net8.0\UITestingPlayground.sourcelink.json
