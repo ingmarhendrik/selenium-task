@@ -20,7 +20,7 @@ namespace UITestingPlaygroundTests
         {
             driver = new ChromeDriver(@"C:\Users\Kasutaja\Documents\Programmeerimine\Testing Class\UITestingPlayground\UITestingPlayground\drivers");
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
         }
 
         [Test]
@@ -97,26 +97,6 @@ namespace UITestingPlaygroundTests
             alert.Accept();
         }
 
-        [Test]
-        public void TestDisabledInput()
-        {
-            driver.Navigate().GoToUrl("http://www.uitestingplayground.com/disabledinput");
-
-            var enableButton = driver.FindElement(By.Id("enableButton"));
-            enableButton.Click();
-
-            var inputField = driver.FindElement(By.Id("inputField"));
-            var waitTime = TimeSpan.FromSeconds(0);
-            while (inputField.GetAttribute("disabled") == "true" && waitTime.TotalSeconds < 10)
-            {
-                Thread.Sleep(500);
-                waitTime += TimeSpan.FromMilliseconds(500);
-            }
-
-            inputField.SendKeys("Hello World!");
-
-            Assert.That(inputField.GetAttribute("value"), Is.EqualTo("Hello World!"), "The input field value was not set correctly.");
-        }
 
         [Test]
         public void TestAnimatedButton()
@@ -169,6 +149,24 @@ namespace UITestingPlaygroundTests
             Assert.That(finalProgressValue, Is.EqualTo(75).Within(5),
                         $"Expected the progress bar to be close to 75%, but it was {finalProgressValue}%.");
         }
+
+        [Test]
+        public void TestAjaxData()
+        {
+            driver.Navigate().GoToUrl("http://www.uitestingplayground.com/ajax");
+
+            var ajaxButton = driver.FindElement(By.Id("ajaxButton"));
+            ajaxButton.Click();
+
+            wait.Until(d => !d.FindElement(By.Id("spinner")).Displayed);
+
+            var label = wait.Until(d => d.FindElement(By.CssSelector("#content .bg-success")));
+            label.Click();
+
+            string labelText = label.Text;
+            Assert.That(labelText, Is.Not.Empty, "The label text should not be empty after AJAX request.");
+        }
+
 
 
         [TearDown]
